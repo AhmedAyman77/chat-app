@@ -1,38 +1,45 @@
-import path from 'path';
-import express from 'express';
 import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
+import connectDB from './config/db.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
 
-dotenv.config();
+(async() => {
+    dotenv.config();
 
-const app = express();
+    const app = express();
 
+    app.use(express.json());
 
-// routes
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
+    // connect to database
+    await connectDB();
 
-app.use('/api/auth', authRouter);
-app.use('/api/messages', messageRouter);
-
-
-// use static assets if in production
-
-const __dirname = path.resolve(path.resolve());
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
-    // Handle SPA routing, return all requests to React app
-    app.get(/.*/, (_, res) => {
-        res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    // routes
+    app.get('/', (req, res) => {
+        res.send('Hello, World!');
     });
-}
+
+    app.use('/api/auth', authRouter);
+    app.use('/api/messages', messageRouter);
 
 
-// start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+    // use static assets if in production
+
+    const __dirname = path.resolve(path.resolve());
+    if (process.env.NODE_ENV === 'production') {
+        app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+        // Handle SPA routing, return all requests to React app
+        app.get(/.*/, (_, res) => {
+            res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+        });
+    }
+
+
+    // start server
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+})();
