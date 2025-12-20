@@ -2,8 +2,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import connectDB from './config/db.js';
+import { errorMiddleware, notFoundMiddleware } from './middleware/errorMiddleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
+
 
 (async() => {
     dotenv.config();
@@ -22,6 +24,10 @@ import messageRouter from './routes/message.route.js';
 
     app.use('/api/auth', authRouter);
     app.use('/api/messages', messageRouter);
+
+    // error handling middleware
+    app.use(notFoundMiddleware);
+    app.use(errorMiddleware);
 
 
     // use static assets if in production

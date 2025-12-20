@@ -1,5 +1,9 @@
-import User from "../models/user.model.js";
+import dotenv from "dotenv";
 import { createToken } from "../config/util.js";
+import { sendWelcomeEmail } from "../email/emailHandlers.js";
+import User from "../models/user.model.js";
+
+dotenv.config();
 
 export const register = async(req, res) => {
     try {
@@ -38,6 +42,13 @@ export const register = async(req, res) => {
 
         // create Token
         createToken({ id: newUser._id }, res);
+
+        // send welcome email
+        try {
+            await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
+        } catch (emailError) {
+            console.error("Failed to send welcome email:", emailError);
+        }
 
         res.status(201).json({
             message: "User registered successfully.",
