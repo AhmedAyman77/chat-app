@@ -6,4 +6,3 @@ const messageRouter = Router();
 messageRouter.get("/send", sendMessage);
 
 export default messageRouter;
-5

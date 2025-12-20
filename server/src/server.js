@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import connectDB from './config/db.js';
-import { errorMiddleware, notFoundMiddleware } from './middleware/errorMiddleware.js';
+import { errorMiddleware, notFoundMiddleware } from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
-
+import cookieParser from 'cookie-parser';
 
 (async() => {
     dotenv.config();
@@ -13,13 +13,15 @@ import messageRouter from './routes/message.route.js';
     const app = express();
 
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(cookieParser());
 
     // connect to database
     await connectDB();
 
     // routes
     app.get('/', (req, res) => {
-        res.send('Hello, World!');
+        res.send('server is running');
     });
 
     app.use('/api/auth', authRouter);
