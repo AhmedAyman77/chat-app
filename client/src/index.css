@@ -8,7 +8,11 @@
 }
 
 .input {
-    @apply w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-slate-200 placeholder-slate-400 focus: ring-2 focus: ring-cyan-500 focus: border-transparent;
+    @apply w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-slate-200 placeholder-slate-400;
+}
+
+.input:focus {
+    @apply ring-2 ring-cyan-500 border-transparent outline-none;
 }
 
 .auth-input-icon {
@@ -24,9 +28,21 @@
 }
 
 .auth-btn {
-    @apply w-full bg-cyan-500 text-white rounded-lg py-2.5 font-medium hover: bg-cyan-600 focus: ring-2 focus: ring-cyan-500;
+    @apply w-full bg-cyan-500 text-white rounded-lg py-2.5 font-medium;
+}
+
+.auth-btn:hover {
+    @apply bg-cyan-600;
+}
+
+.auth-btn:focus {
+    @apply ring-2 ring-cyan-500 outline-none;
 }
 
 .auth-link {
-    @apply px-4 py-2 inline-block bg-cyan-500/10 rounded-lg text-cyan-400 hover: text-cyan-500 text-sm transition-colors;
+    @apply px-4 py-2 inline-block bg-cyan-500/10 rounded-lg text-cyan-400 text-sm transition-colors;
+}
+
+.auth-link:hover {
+    @apply text-cyan-500;
 }

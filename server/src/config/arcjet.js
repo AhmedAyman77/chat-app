@@ -23,7 +23,7 @@ const aj = arcjet({
         slidingWindow({
             mode: "LIVE", // Blocks requests. Use "DRY_RUN" to log only
             // Define the limit
-            max: 3, // allow 100 requests
+            max: 100, // allow 100 requests
             interval: 60, // per 60 seconds
         }),
     ],

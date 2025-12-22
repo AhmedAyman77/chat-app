@@ -7,13 +7,12 @@ import connectDB from './config/db.js';
 import { errorMiddleware, notFoundMiddleware } from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
+import { io, httpServer, app } from './config/socket.js';
 
 (async() => {
     dotenv.config();
 
-    const app = express();
-
-    app.use(express.json());
+    app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
     app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
@@ -46,10 +45,9 @@ import messageRouter from './routes/message.route.js';
         });
     }
 
-
     // start server
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
 })();

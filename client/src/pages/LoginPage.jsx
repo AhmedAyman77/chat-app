@@ -1,8 +1,8 @@
-import { LoaderIcon, LockIcon, MailIcon, MessageCircleIcon } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
-import { useAuthStore } from "../../../frontEnd/src/store/useAuthStore";
+import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
+import { MessageCircleIcon, MailIcon, LoaderIcon, LockIcon } from "lucide-react";
+import { Link } from "react-router";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
