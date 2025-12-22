@@ -1,3 +1,5 @@
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
@@ -5,7 +7,6 @@ import connectDB from './config/db.js';
 import { errorMiddleware, notFoundMiddleware } from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
-import cookieParser from 'cookie-parser';
 
 (async() => {
     dotenv.config();
@@ -15,6 +16,7 @@ import cookieParser from 'cookie-parser';
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
+    app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
 
     // connect to database
     await connectDB();
