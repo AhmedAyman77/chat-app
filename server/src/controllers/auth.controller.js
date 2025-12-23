@@ -6,7 +6,6 @@ import cloudinary from "../config/cloudinary.js";
 
 export const register = async(req, res) => {
     try {
-        // dotenv.config();
         const { fullName, email, password } = req.body;
 
         if (!fullName || !email || !password) {

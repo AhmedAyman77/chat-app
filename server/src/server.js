@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import connectDB from './config/db.js';
+import { app, httpServer } from './config/socket.js';
 import { errorMiddleware, notFoundMiddleware } from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
-import { io, httpServer, app } from './config/socket.js';
 
 (async() => {
     dotenv.config();
@@ -21,29 +21,27 @@ import { io, httpServer, app } from './config/socket.js';
     await connectDB();
 
     // routes
-    app.get('/', (req, res) => {
+    app.get('/health', (req, res) => {
         res.send('server is running');
     });
 
     app.use('/api/auth', authRouter);
     app.use('/api/messages', messageRouter);
 
+    // use static assets if in production
+    const __dirname = path.resolve();
+
+    if (process.env.NODE_ENV === 'production') {
+        app.use(express.static(path.join(__dirname, "../client/dist")));
+        // Handle SPA routing, return all requests to React app
+        app.get(/.*/, (_, res) => {
+            res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+        });
+    }
+
     // error handling middleware
     app.use(notFoundMiddleware);
     app.use(errorMiddleware);
-
-
-    // use static assets if in production
-
-    const __dirname = path.resolve(path.resolve());
-    if (process.env.NODE_ENV === 'production') {
-        app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
-        // Handle SPA routing, return all requests to React app
-        app.get(/.*/, (_, res) => {
-            res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-        });
-    }
 
     // start server
     const PORT = process.env.PORT || 3000;

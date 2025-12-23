@@ -5,7 +5,7 @@ export const socketAuthMiddleware = async(socket, next) => {
     try { // get token from http-only cookie
         const token = socket.handshake.headers.cookie
             ?.split("; ")
-            .find((cookie) => cookie.startsWith("token="))
+            .find((cookie) => cookie.startsWith("jwt="))
             ?.split("=")[1];
         if (!token) {
             return next(new Error("Authentication error: No token provided"));
