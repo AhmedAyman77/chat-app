@@ -1,6 +1,5 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import connectDB from './config/db.js';
@@ -8,14 +7,13 @@ import { app, httpServer } from './config/socket.js';
 import { errorMiddleware, notFoundMiddleware } from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
+import ENV from './config/env.js';
 
 (async() => {
-    dotenv.config();
-
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
-    app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
+    app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }))
 
     // connect to database
     await connectDB();
@@ -31,7 +29,7 @@ import messageRouter from './routes/message.route.js';
     // use static assets if in production
     const __dirname = path.resolve();
 
-    if (process.env.NODE_ENV === 'production') {
+    if (ENV.NODE_ENV === 'production') {
         app.use(express.static(path.join(__dirname, "../client/dist")));
         // Handle SPA routing, return all requests to React app
         app.get(/.*/, (_, res) => {
@@ -44,7 +42,7 @@ import messageRouter from './routes/message.route.js';
     app.use(errorMiddleware);
 
     // start server
-    const PORT = process.env.PORT || 3000;
+    const PORT = ENV.PORT || 3000;
     httpServer.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });

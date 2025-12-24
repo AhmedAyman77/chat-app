@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import ENV from "../config/env.js";
 
 export const socketAuthMiddleware = async(socket, next) => {
     try { // get token from http-only cookie
@@ -12,13 +13,13 @@ export const socketAuthMiddleware = async(socket, next) => {
         }
 
         // verify token
-        const decode = jwt.verify(token, process.env.JWT_SECRET)
+        const decode = jwt.verify(token, ENV.JWT_SECRET)
         if (!decode) {
             return next(new Error("Authentication error: Invalid token"));
         }
 
         // fetch user from database
-        const user = await User.findById(decode.id).select("-password");
+        const user = await User.findById(decode.userId).select("-password");
         if (!user) {
             return next(new Error("Authentication error: User not found"));
         }

@@ -1,14 +1,18 @@
-import express from "express";
 import http from "http";
+import ENV from "./env.js";
+import express from "express";
 import { Server } from "socket.io";
 import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js";
+
 
 const app = express();
 const httpServer = http.createServer(app); // create one http server to serve both http and socket.io
 const io = new Server(httpServer, {
     cors: {
-        origin: [process.env.CLIENT_URL],
-        credentials: true
+        origin: [ENV.CLIENT_URL],
+        methods: ["GET", "POST"],
+        credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization"]
     }
 })
 
@@ -24,6 +28,7 @@ export function getReceiverSocketId(userId) {
 }
 
 io.on("connection", (socket) => { // socket is the connected client
+    console.log("online users:", onlineUsers);
     console.log("A user connected", socket.user.fullName);
 
     const userId = socket.userId;

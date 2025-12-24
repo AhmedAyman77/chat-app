@@ -3,6 +3,7 @@ import { createToken } from "../config/util.js";
 import { sendWelcomeEmail } from "../email/emailHandlers.js";
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
+import ENV from "../config/env.js";
 
 export const register = async(req, res) => {
     try {
@@ -42,7 +43,7 @@ export const register = async(req, res) => {
 
         // send welcome email
         try {
-            await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
+            await sendWelcomeEmail(newUser.email, newUser.fullName, ENV.CLIENT_URL);
         } catch (emailError) {
             console.error("Failed to send welcome email:", emailError);
         }

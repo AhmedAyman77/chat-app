@@ -31,7 +31,9 @@ export const useAuthStore = create((set, get) => ({
         set({ isSigningUp: true });
         try {
             const res = await axiosInstance.post("/auth/register", data);
-            set({ authUser: res.data });
+            
+            // ⚠️ FIX: Use userInfo instead of the entire response
+            set({ authUser: res.data.userInfo });
 
             toast.success("Account created successfully!");
             get().connectSocket();
@@ -85,16 +87,29 @@ export const useAuthStore = create((set, get) => ({
         const { authUser } = get();
         if (!authUser || get().socket?.connected) return;
 
+        // ✅ Add logging to debug
+        console.log("🔌 Attempting to connect socket for user:", authUser);
+
         const socket = io(BASE_URL, {
-            withCredentials: true, // this ensures cookies are sent with the connection
+            withCredentials: true,
         });
 
         socket.connect();
 
         set({ socket });
 
+        // ✅ Add connection event listeners for debugging
+        socket.on("connect", () => {
+            console.log("✅ Socket connected successfully:", socket.id);
+        });
+
+        socket.on("connect_error", (error) => {
+            console.error("❌ Socket connection error:", error);
+        });
+
         // listen for online users event
         socket.on("onlineUsers", (userIds) => {
+            console.log("📡 Received online users:", userIds);
             set({ onlineUsers: userIds });
         });
     },

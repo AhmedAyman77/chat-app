@@ -1,12 +1,13 @@
 import { XIcon } from "lucide-react";
-import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { useChatStore } from "../store/useChatStore";
 
 function ChatHeader() {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
-  const isOnline = onlineUsers.includes(selectedUser._id);
+  
+  const isOnline = onlineUsers.includes(selectedUser._id.toString());
 
   useEffect(() => {
     const handleEscKey = (event) => {
