@@ -1,0 +1,8 @@
+{
+    "build": {
+        "buildCommand": "npm install --prefix server && npm install --prefix client && npm run build --prefix client"
+    },
+    "deploy": {
+        "start": "npm run start --prefix server"
+    }
+}
