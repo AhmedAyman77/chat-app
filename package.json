@@ -1,0 +1,22 @@
+{
+    "name": "chat-app",
+    "version": "1.0.0",
+    "main": "index.js",
+    "description": "Real-time chat application",
+    "scripts": {
+        "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+        "start": "npm run start --prefix server"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AhmedAyman77/chat-app.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/AhmedAyman77/chat-app/issues"
+    },
+    "homepage": "https://github.com/AhmedAyman77/chat-app#readme"
+}
