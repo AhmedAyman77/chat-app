@@ -10,6 +10,8 @@ import messageRouter from './routes/message.route.js';
 import ENV from './config/env.js';
 
 (async() => {
+    app.set("trust proxy", true);
+
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
